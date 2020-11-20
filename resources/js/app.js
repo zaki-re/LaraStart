@@ -12,6 +12,7 @@ let routes = [
     { path: '/profile', component: require('./components/Profile.vue').default }
   ]
   const router = new VueRouter({
+      mode:'history',
     routes // short for `routes: routes`
   })
 
