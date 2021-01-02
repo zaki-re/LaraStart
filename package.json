@@ -25,6 +25,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.1",
         "admin-lte": "^3.0.5",
+        "moment": "^2.29.1",
         "npm-watch": "^0.7.0",
         "vform": "^1.0.1",
         "vue": "^2.6.12",

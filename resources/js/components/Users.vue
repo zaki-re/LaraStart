@@ -34,8 +34,8 @@
                   <td>{{user.id}}</td>
                   <td>{{user.name}}</td>
                   <td>{{user.email}}</td>
-                  <th>{{user.type}}</th>
-                  <th>{{user.created_at}}</th>
+                  <th>{{user.type | upText}}</th>
+                  <th>{{user.created_at | myDate}}</th>
                   
 
                 
