@@ -19,21 +19,26 @@
           <!-- /.card-header -->
           <div class="card-body table-responsive p-0">
             <table class="table table-hover">
-              <thead>
+            
                 <tr>
                   <th>ID</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Type</th>
+                  <th>registered at</th>
+
                   <th>Modify</th>
                 </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>183</td>
-                  <td>John Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="tag tag-success">Approved</span></td>
+           
+                <tr v-for="user in users" :key="user.id">
+                  <td>{{user.id}}</td>
+                  <td>{{user.name}}</td>
+                  <td>{{user.email}}</td>
+                  <th>{{user.type}}</th>
+                  <th>{{user.created_at}}</th>
+                  
+
+                
                   <td>
                     <a href="#">
                       <i class="fa fa-edit blue"></i>
@@ -44,7 +49,7 @@
                     </a>
                   </td>
                 </tr>
-              </tbody>
+             
             </table>
           </div>
           <!-- /.card-body -->
@@ -163,7 +168,9 @@
 export default {
   data() {
     return {
+      users:{},
       form: new Form({
+       
         name: "",
         email: "",
         password: "",
@@ -176,10 +183,14 @@ export default {
   methods: {
     createUser(){
         this.form.post('api/user')
+    },
+    loadUser(){
+       axios.get('api/user').then(({data}) => (this.users= data.data));
     }
   },
   mounted() {
     console.log("Component mounted.");
+    this.loadUser();
   },
 };
 </script>
