@@ -27,8 +27,10 @@
         "admin-lte": "^3.0.5",
         "moment": "^2.29.1",
         "npm-watch": "^0.7.0",
+        "sweetalert2": "^10.12.7",
         "vform": "^1.0.1",
         "vue": "^2.6.12",
+        "vue-progressbar": "^0.7.5",
         "vue-router": "^3.4.9"
     }
 }

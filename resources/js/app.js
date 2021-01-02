@@ -3,6 +3,32 @@ require('./bootstrap');
 window.Vue = require('vue');
 import { Form, HasError, AlertError } from 'vform';
 import moment from 'moment';
+import VueProgressBar from 'vue-progressbar'
+import swal from 'sweetalert2'
+
+
+window.swal =swal;
+const toast = swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', swal.stopTimer)
+    toast.addEventListener('mouseleave', swal.resumeTimer)
+  }
+});
+window.toast =toast;
+
+window.Fire= new Vue();
+
+Vue.use(VueProgressBar, {
+  color: '#bffaf3',
+  failedColor: '#874b4b',
+  height:'3px',
+ 
+})
 
 window.Form= Form; 
 Vue.component(HasError.name, HasError)
