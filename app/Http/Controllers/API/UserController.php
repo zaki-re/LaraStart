@@ -42,7 +42,7 @@ class UserController extends Controller
            'type' =>$request['type'], 
            'bio' =>$request['bio'], 
            'password' =>Hash::make($request['password']), 
-           //'photo' =>$request['photo'], 
+           'photo' =>$request['photo'], 
 
         ]);
     }
