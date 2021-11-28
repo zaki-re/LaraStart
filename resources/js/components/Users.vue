@@ -115,7 +115,7 @@
                                     v-model="form.bio"
                                     type="text"
                                     name="bio"
-                                    placeholder="Short bio for the user"
+                                    placeholder="Short bio for the user (Optional)"
                                     class="form-control"
                                     :class="{
                                         'is-invalid': form.errors.has('email')
@@ -159,7 +159,7 @@
                                 />
                                 <has-error
                                     :form="form"
-                                    field="name"
+                                    field="password"
                                 ></has-error>
                             </div>
                         </div>
