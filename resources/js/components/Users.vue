@@ -205,8 +205,8 @@ export default {
     },
     methods: {
          editModel(user){
-             this.editmode= true,
-            this.form.reset()
+            this.editmode= true,
+            this.form.clear()
               $("#addNew").modal("show");
             this.form.fill(user);
 
@@ -282,14 +282,15 @@ export default {
                     });
                     this.$Progress.finish();
                 })
-                .catch(() => {});
+                .catch(() => {
+                    this.$Progress.fail();
+                });
         },
         loadUser() {
             axios.get("api/user").then(({ data }) => (this.users = data.data));
         }
     },
     mounted() {
-        console.log("Component mounted.");
         this.loadUser();
         Fire.$on("afterCreated", () => {
             this.loadUser();
