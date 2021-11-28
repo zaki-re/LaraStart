@@ -9,10 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
 
     /**
      * Display a listing of the resource.
@@ -46,7 +42,7 @@ class UserController extends Controller
            'type' =>$request['type'], 
            'bio' =>$request['bio'], 
            'password' =>Hash::make($request['password']), 
-           'photo' =>$request['photo'], 
+           //'photo' =>$request['photo'], 
 
         ]);
     }
