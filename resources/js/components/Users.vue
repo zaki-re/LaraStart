@@ -261,8 +261,8 @@ export default {
                         })
                         .catch(() => {
                             swal.fire(
-                                "failed!",
-                                "Somethings want wrong.",
+                                "Failed!",
+                                "There was something wrong.",
                                 "warrning"
                             );
                         });
@@ -277,8 +277,8 @@ export default {
                     Fire.$emit("afterCreated");
                     $("#addNew").modal("hide");
                     toast.fire({
-                        icone: "success",
-                        title: "Signed in successfully"
+                        icon: 'success',
+                        title: "User created successfully"
                     });
                     this.$Progress.finish();
                 })
