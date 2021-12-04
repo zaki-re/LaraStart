@@ -216,10 +216,9 @@ Latest commit 22833bd on 24 Oct 2018
             updateProfile(e){
                 let file = e.target.files[0];
                 let reader = new FileReader();
-                let limit = 1024 * 1024 * 2;
-                if(file['size'] > limit){
-                    swal({
-                        type: 'error',
+                if(file['size'] > 1024 * 1024 * 2){
+                    swal.fire({
+                        icon: 'error',
                         title: 'Oops...',
                         text: 'You are uploading a large file',
                     })
