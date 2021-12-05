@@ -233,6 +233,7 @@ Latest commit 22833bd on 24 Oct 2018
         created() {
             axios.get("api/profile")
             .then(({ data }) => (this.form.fill(data)));
+            
         }
     }
 </script>
