@@ -61,6 +61,8 @@ Vue.filter('myDate',function(created){
   
 })
 Vue.component('exemple-component',require('./components/ExempleComponent.vue'));
+Vue.component('not-found',require('./components/NotFound.vue'));
+
 const app = new Vue({
     el: '#app',
     router

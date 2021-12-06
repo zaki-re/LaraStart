@@ -51,6 +51,9 @@
                 <!-- /.card -->
             </div>
         </div>
+        <div v-else>
+            <not-found></not-found>
+        </div>
         <!-- Modal -->
         <div
             class="modal fade"
@@ -207,7 +210,9 @@
     </div>
 </template>
 <script>
+import NotFound from './NotFound.vue';
 export default {
+  components: { NotFound },
     data() {
         return {
             editmode: false,

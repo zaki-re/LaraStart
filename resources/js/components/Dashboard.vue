@@ -1,21 +1,14 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card card-default">
-                    <div class="card-header">
-                        Dashboard Component
-                    </div>
-                    <div class="card-body">
-                        I'am an example Component.
-                    </div>
-                </div>
-            </div>
+           <not-found>  </not-found>
         </div>
     </div>
 </template>
 <script>
+import NotFound from './NotFound.vue'
 export default {
+  components: { NotFound },
     mounted(){
         console.log('Component mounted.')
     }
