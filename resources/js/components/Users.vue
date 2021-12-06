@@ -5,7 +5,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Users Table</h3>
-
                         <div class="card-tools">
                             <button
                                 class="btn btn-success"
@@ -63,8 +62,20 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5  v-show="!editmode" class="modal-title" id="addNewLabel">Add New User</h5>
-                        <h5 v-show="editmode" class="modal-title" id="addNewLabel">Update User's Info</h5>
+                        <h5
+                            v-show="!editmode"
+                            class="modal-title"
+                            id="addNewLabel"
+                        >
+                            Add New User
+                        </h5>
+                        <h5
+                            v-show="editmode"
+                            class="modal-title"
+                            id="addNewLabel"
+                        >
+                            Update User's Info
+                        </h5>
                         <button
                             type="button"
                             class="close"
@@ -75,7 +86,9 @@
                         </button>
                     </div>
 
-                    <form @submit.prevent="editmode ? updateUser() :createUser()">
+                    <form
+                        @submit.prevent="editmode ? updateUser() : createUser()"
+                    >
                         <div class="modal-body">
                             <div class="form-group">
                                 <input
@@ -116,7 +129,7 @@
                                     v-model="form.bio"
                                     type="text"
                                     name="bio"
-                                    placeholder="Short bio for the user"
+                                    placeholder="Short bio for the user (Optional)"
                                     class="form-control"
                                     :class="{
                                         'is-invalid': form.errors.has('email')
@@ -149,6 +162,7 @@
                                     type="password"
                                     name="password"
                                     id="password"
+                                    placeholder="Password"
                                     class="form-control"
                                     :class="{
                                         'is-invalid': form.errors.has(
@@ -158,7 +172,7 @@
                                 />
                                 <has-error
                                     :form="form"
-                                    field="name"
+                                    field="password"
                                 ></has-error>
                             </div>
                         </div>
@@ -171,10 +185,18 @@
                             >
                                 Close
                             </button>
-                            <button v-show="!editmode" type="submit" class="btn btn-primary">
+                            <button
+                                v-show="!editmode"
+                                type="submit"
+                                class="btn btn-primary"
+                            >
                                 Create
                             </button>
-                            <button v-show="editmode" type="submit" class="btn btn-success">
+                            <button
+                                v-show="editmode"
+                                type="submit"
+                                class="btn btn-success"
+                            >
                                 Update
                             </button>
                         </div>
@@ -187,12 +209,11 @@
 <script>
 export default {
     data() {
-        
         return {
-        editmode: false,
-        users: {},
+            editmode: false,
+            users: {},
             form: new Form({
-                id:"",
+                id: "",
                 name: "",
                 email: "",
                 password: "",
@@ -203,39 +224,34 @@ export default {
         };
     },
     methods: {
-         editModel(user){
-             this.editmode= true,
-            this.form.reset()
-              $("#addNew").modal("show");
+        editModel(user) {
+            (this.editmode = true), this.form.clear();
+            $("#addNew").modal("show");
             this.form.fill(user);
-
         },
-        openModel(){
-            this.editmode= false,   
-            this.form.reset()
-              $("#addNew").modal("show");
-
-
+        openModel() {
+            (this.editmode = false), this.form.reset();
+            $("#addNew").modal("show");
         },
 
-        updateUser(){
-                this.$Progress.start()
-              this.form.put ('api/user/'+this.form.id).then(()=>{
-                   
-                   Fire.$emit("afterCreated");
-                   $("#addNew").modal("hide");
-                   swal.fire(
-                                "Updated!",
-                                "Your User has been Updated.",
-                                "success"
-                            );
-                this.$Progress.finish(); 
-              }).catch(()=>{
-                this.$Progress.fail();
-              })
-
+        updateUser() {
+            this.$Progress.start();
+            this.form
+                .put("api/user/" + this.form.id)
+                .then(() => {
+                    Fire.$emit("afterCreated");
+                    $("#addNew").modal("hide");
+                    swal.fire(
+                        "Updated!",
+                        "User has been updated successfully.",
+                        "success"
+                    );
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
         },
-
 
         deleteUser(id) {
             swal.fire({
@@ -260,8 +276,8 @@ export default {
                         })
                         .catch(() => {
                             swal.fire(
-                                "failed!",
-                                "Somethings want wrong.",
+                                "Failed!",
+                                "There was something wrong.",
                                 "warrning"
                             );
                         });
@@ -276,19 +292,20 @@ export default {
                     Fire.$emit("afterCreated");
                     $("#addNew").modal("hide");
                     toast.fire({
-                        icone: "success",
-                        title: "Signed in successfully"
+                        icon: "success",
+                        title: "User created successfully"
                     });
                     this.$Progress.finish();
                 })
-                .catch(() => {});
+                .catch(() => {
+                    this.$Progress.fail();
+                });
         },
         loadUser() {
             axios.get("api/user").then(({ data }) => (this.users = data.data));
         }
     },
     mounted() {
-        console.log("Component mounted.");
         this.loadUser();
         Fire.$on("afterCreated", () => {
             this.loadUser();
