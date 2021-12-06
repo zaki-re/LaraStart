@@ -1,11 +1,3 @@
-Skip to content Search or jump to… Pull requests Issues Marketplace Explore
-@zaki-re This repository has been archived by the owner. It is now read-only.
-Hujjat / laravStart Public archive 44 367286 Code Issues 10 Pull requests 3
-Actions Projects Wiki Security Insights
-laravStart/resources/assets/js/components/Profile.vue darren Refactor for code
-readability Latest commit 22833bd on 24 Oct 2018 History 1 contributor 215 lines
-(191 sloc) 8.77 KB
-
 <style>
 .widget-user-header {
     background-position: center center;

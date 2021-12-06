@@ -5,7 +5,8 @@ import { Form, HasError, AlertError } from 'vform';
 import moment from 'moment';
 import VueProgressBar from 'vue-progressbar'
 import swal from 'sweetalert2'
-
+import Gate from './Gate'
+Vue.prototype.$gate = new Gate(window.user);
 
 window.swal =swal;
 const toast = swal.mixin({
@@ -34,6 +35,7 @@ window.Form= Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 import VueRouter from 'vue-router'
+import Vue from 'vue';
 
 
 Vue.use(VueRouter)
