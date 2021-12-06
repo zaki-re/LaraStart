@@ -102,12 +102,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <p> Users</p>
                                     </router-link>
                                 </li>
+                                @can('isAdmin')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="fas fa-cogs  nav-icon"></i>
                                         <p> Developper</p>
                                     </a>
                                 </li>
+                                @endcan
                             </ul>
                         </li>
 
