@@ -1,6 +1,7 @@
 /node_modules
 /public/css
 /public/js
+passport-token
 /public/hot
 /public/storage
 /storage/*.key
