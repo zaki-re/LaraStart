@@ -4,6 +4,4 @@ RUN apt update -y \
 RUN apt-get update | apt-get install php7.4-mysql -y
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
-RUN cp .env.example .env
-RUN composer install
-RUN php artisan key:generate
+
