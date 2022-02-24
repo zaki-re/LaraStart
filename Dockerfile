@@ -1,4 +1,4 @@
-FROM debian:stable-slim
-RUN apt-get update -y && apt-get install php7.4 curl php-mbstring php-xml php-pdo php-xdebug zip unzip php7.4-zip php7.4-mysql -y
+FROM php:7.4.28-zts-alpine3.14
+RUN yes | apk apk update && yes | apk add curl  unzip 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
