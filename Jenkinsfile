@@ -50,21 +50,12 @@ pipeline {
                sh "vendor/bin/phpunit --coverage-html reports/"
             }
         }
-        stage("Build Docker Image") {
-            agent any
-            steps {
-        		    script{
-                        docker.build("${env.Release_laravelproject}:${env.BUILD_NUMBER}")
-                    }
-            }
-		        }
-        
         stage("Deploy Docker Image ") {
             agent any
 		    steps {
 		        script{
                     withDockerRegistry(credentialsId: Credential_id_var) {
-                        sh  "docker push ${env.Release_laravelproject}:${env.BUILD_NUMBER}"
+                        docker.build("${env.Release_laravelproject}:${env.BUILD_NUMBER}").push()
                     }
 		        }
             }
