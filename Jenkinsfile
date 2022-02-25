@@ -2,12 +2,14 @@ pipeline {
     agent any
     environment{
         QUALITY_GATE_HADOLINT ='5'
+        Credential_id_var = 'ZakariaRezzoug'
+        Release_laravelproject = "zakariarezzoug/projetlaravel"
     }
 	stages {
 	    stage ('Checkout'){
 	        agent any
 	       steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'DisableRemotePoll']], userRemoteConfigs: [[url: 'https://github.com/zaki-re/LaraStart']]])	           
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'DisableRemotePoll']], userRemoteConfigs: [[url: 'https://github.com/zaki-re/LaraStart']]])
 	       }
 	    }
 	   stage ("lint dockerfile") {
@@ -46,10 +48,37 @@ pipeline {
             agent { dockerfile true }
 		    steps {
                sh "vendor/bin/phpunit --coverage-html reports/"
-             cleanWs()
-
             }
         }
-		
+        stage("Build Docker Image") {
+            agent any
+            steps {
+        		    script{
+                        docker.build("${env.Release_laravelproject}:${env.BUILD_NUMBER}")
+                    }
+            }
+		        }
+        
+        stage("Deploy Docker Image ") {
+            agent any
+		    steps {
+		        script{
+                    withDockerRegistry(credentialsId: Credential_id_var) {
+                        sh  "docker push ${env.Release_laravelproject}:${env.BUILD_NUMBER}"
+                    }
+		        }
+            }
+        }
 	}
+	post {
+		always {
+			        cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
+
+		}
+  	}
 }
