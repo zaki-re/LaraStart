@@ -38,7 +38,12 @@ pipeline {
         // On build notre projet a l'aide du DockerFile qui va etre mit comme agent
         // Et exectuer tous les commendes de laravel pour tester que l'application build correctement 
 		stage ('Build') {
-                agent { dockerfile true }
+                agent {
+        		        dockerfile {
+            		        dir 'dockerfileAgent'
+            		        filename 'Dockerfile'
+         		        }
+      		        }
 		 	steps {
 		 		sh 'cp .env.example .env'
 		 		sh 'composer install'
@@ -47,14 +52,24 @@ pipeline {
 		}
         // Faire les test unitaire avec une commande intégré dans Laravel dans le dossier test on peut ajouter les tests qu'on veut dans notre cas il y'en a deja deux
 		stage('Unit Test') {
-            agent { dockerfile true }
+            agent {
+        		    dockerfile {
+            		    dir 'dockerfileAgent'
+            		    filename 'Dockerfile'
+         		    }
+      		    }
 		    steps {
                 sh 'php artisan test'
 			}
 		}
         // On test la couverture du code toujours avec une commande proposé par Laravel qui nous affiche les taux de couverture et on peut rajouter des paramettres directement dans laravel
 		stage("Code coverage") {
-            agent { dockerfile true }
+            agent {
+        		    dockerfile {
+            		    dir 'dockerfileAgent'
+            		    filename 'Dockerfile'
+         		    }
+      		    }
 		    steps {
                sh "vendor/bin/phpunit --coverage-html reports/"
             }
