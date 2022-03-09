@@ -1,11 +1,13 @@
-FROM  bitnami/laravel:9.1.1-debian-10-r1
-RUN apt update \
-	&& apt install -y --no-install-recommends git \
+FROM php:7.4.28-zts-alpine3.14
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && apk add git \
     && git clone https://github.com/zaki-re/LaraStart.git 
 WORKDIR /LaraStart
-RUN ls
 RUN composer install
+COPY .env.example .env
 RUN php artisan key:generate
-RUN php artisan serve 
+CMD ["php","artisan","serve"]
+
 
 
