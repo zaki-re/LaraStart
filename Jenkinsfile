@@ -1,18 +1,23 @@
 pipeline {
     agent any
+    // Utilisation de variable pour ce connecter au compte dockerhub et pour le Quality Gate de hadolint (plus le nombre est eleve plus c'est plus tolérant aux erreurs )
+    // Release_laravelproject c'est le nom sur du repertoire le dockerhub
     environment{
         QUALITY_GATE_HADOLINT ='5'
         Credential_id_var = 'ZakariaRezzoug'
         Release_laravelproject = "zakariarezzoug/projetlaravel"
     }
 	stages {
+        // Récupération  du projet depuis github sur la branche main
 	    stage ('Checkout'){
 	        agent any
 	       steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'DisableRemotePoll']], userRemoteConfigs: [[url: 'https://github.com/zaki-re/LaraStart']]])
 	       }
 	    }
-	   stage ("lint dockerfile") {
+       // Utiliser hadolint pour tester le fichier dockerfile utilisé dans le projet utilisation d'une image hadolint officiel de dockerhub Quality Gate pour donner le seuil de tolérance
+       // Apres effacer hadolint_lint.json pour ne pas avoir d'encombrement au relancement (post elle est éxecuter dans tout les cas meme si il y a une erreur)
+        stage ("lint dockerfile") {
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
@@ -30,6 +35,8 @@ pipeline {
                     }
                 }
         }
+        // On build notre projet a l'aide du dockerfile qui va etre mit comme agent
+        // Et exectuer tous les commendes de laravel pour tester que l'application build correctement 
 		stage ('Build') {
                 agent { dockerfile true }
 		 	steps {
@@ -38,18 +45,21 @@ pipeline {
 		 		sh 'php artisan key:generate'
 		 	}
 		}
+        // Faire les test unitaire avec une commande intégré dans laravel dans le dossier test on peut ajouter les tests qu'on veut dans notre cas il y'en a deja deux
 		stage('Unit Test') {
             agent { dockerfile true }
 		    steps {
                 sh 'php artisan test'
 			}
 		}
+        // On test la couverture du code toujours avec une commande proposé par laravel qui nous affiche les taux de couverture et on peut rajouter des paramettres directement dans laravel
 		stage("Code coverage") {
             agent { dockerfile true }
 		    steps {
                sh "vendor/bin/phpunit --coverage-html reports/"
             }
         }
+        // On build et on déploie notre Dockerfile de configuration dans dockerhub 
         stage("Deploy Docker Image ") {
             agent any
 		    steps {
@@ -61,6 +71,7 @@ pipeline {
             }
         }
 	}
+    // On efface le tout a la fin pour ne pas avoir de probleme au relancement 
 	post {
 		always {
 			        cleanWs(cleanWhenNotBuilt: false,
