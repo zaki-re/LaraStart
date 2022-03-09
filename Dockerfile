@@ -3,6 +3,7 @@ RUN apt update \
 	&& apt install -y --no-install-recommends git \
     && git clone https://github.com/zaki-re/LaraStart.git 
 WORKDIR /LaraStart
+RUN ls
 RUN composer install
 RUN php artisan key:generate
 RUN php artisan serve 
