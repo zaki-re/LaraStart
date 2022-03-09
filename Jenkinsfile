@@ -17,7 +17,7 @@ pipeline {
 	    }
        // Utiliser Hadolint pour tester le fichier dockerfile dans notre projet, utilisation d'une image Hadolint officiel de DockerHub Quality Gate pour donner le seuil de tolérance
        // Apres effacer hadolint_lint.json pour ne pas avoir d'encombrement au relancement (post elle est éxecuter dans tout les cas meme si il y a une erreur)
-        stage ("lint dockerfile") {
+      /*  stage ("lint dockerfile") {
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
@@ -34,7 +34,7 @@ pipeline {
                         sh 'rm hadolint_lint.json'
                     }
                 }
-        }
+        }*/
         // On build notre projet a l'aide du DockerFile qui va etre mit comme agent
         // Et exectuer tous les commendes de laravel pour tester que l'application build correctement 
 		stage ('Build') {
@@ -74,7 +74,7 @@ pipeline {
                sh "vendor/bin/phpunit --coverage-html reports/"
             }
         }
-        // On build et on déploie notre Dockerfile de configuration dans DockerHub 
+        // On build et on déploie notre Dockerfile de notre image dans DockerHub 
         stage("Deploy Docker Image ") {
             agent any
 		    steps {
