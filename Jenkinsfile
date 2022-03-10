@@ -15,47 +15,50 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'DisableRemotePoll']], userRemoteConfigs: [[url: 'https://github.com/zaki-re/LaraStart']]])
 	       }
 	    }
-       
-        // On build notre projet a l'aide du DockerFile qui va etre mit comme agent
+       stage('test') {
+            parallel {
+                // On build notre projet a l'aide du DockerFile qui va etre mit comme agent
         // Et exectuer tous les commendes de laravel pour tester que l'application build correctement 
-		stage ('Build') {
+		        stage ('Build') {
                 agent {
         		        dockerfile {
             		        dir 'dockerfileAgent'
             		        filename 'Dockerfile'
          		        }
       		        }
-		 	steps {
-		 		sh 'cp .env.example .env'
-		 		sh 'composer install'
-		 		sh 'php artisan key:generate'
-		 	}
+                steps {
+                    sh 'cp .env.example .env'
+                    sh 'composer install'
+                    sh 'php artisan key:generate'
+                }
 		}
         // Faire les test unitaire avec une commande intégré dans Laravel dans le dossier test on peut ajouter les tests qu'on veut dans notre cas il y'en a deja deux
-		stage('Unit Test') {
-            agent {
-        		    dockerfile {
-            		    dir 'dockerfileAgent'
-            		    filename 'Dockerfile'
-         		    }
-      		    }
-		    steps {
-                sh 'php artisan test > unit_test.json'
-                archiveArtifacts ' unit_test.json'
-			}
-		}
-        // On test la couverture du code toujours avec une commande proposé par Laravel qui nous affiche les taux de couverture et on peut rajouter des paramettres directement dans laravel
-		stage("Code coverage") {
-            agent {
-        		    dockerfile {
-            		    dir 'dockerfileAgent'
-            		    filename 'Dockerfile'
-         		    }
-      		    }
-		    steps {
-               sh "vendor/bin/phpunit --coverage-html reports/"
+            stage('Unit Test') {
+                agent {
+                        dockerfile {
+                            dir 'dockerfileAgent'
+                            filename 'Dockerfile'
+                        }
+                    }
+                steps {
+                    sh 'php artisan test > unit_test.json'
+                    archiveArtifacts ' unit_test.json'
+                }
             }
-        }
+        // On test la couverture du code toujours avec une commande proposé par Laravel qui nous affiche les taux de couverture et on peut rajouter des paramettres directement dans laravel
+            stage("Code coverage") {
+                agent {
+                        dockerfile {
+                            dir 'dockerfileAgent'
+                            filename 'Dockerfile'
+                        }
+                    }
+                steps {
+                sh "vendor/bin/phpunit --coverage-html reports/"
+                }
+            }
+                }
+            }
         // Utiliser Hadolint pour tester le fichier dockerfile dans notre projet, utilisation d'une image Hadolint officiel de DockerHub Quality Gate pour donner le seuil de tolérance
         // Apres effacer hadolint_lint.json pour ne pas avoir d'encombrement au relancement (post elle est éxecuter dans tout les cas meme si il y a une erreur)
         stage ("lint Dockerfile") {
